@@ -22,7 +22,7 @@ def caps
   {
     caps: {
       platformName: "Android",
-      deviceName: "odessa",
+      deviceName: "odessa", # Aqui poner el nombre del dispositivo
       appPackage: "com.mercadolibre",
       appActivity: ".splash.SplashActivity",
       automationName: "UiAutomator2",
