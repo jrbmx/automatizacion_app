@@ -69,3 +69,8 @@ Al finalizar la prueba, se generará un archivo **reporte_pruebas.html**, donde 
     Usa el comando:
 
        adb devices
+4. **Error: Nombre del dispositivo incorrecto:**
+    Verifica que el nombre del dispositivo que está conectado sea el correcto.
+    Usa el comando para visualizar el name del dispositivo, despues de verificar que si esta conectado y en modo Depuración USB:
+
+       adb shell
