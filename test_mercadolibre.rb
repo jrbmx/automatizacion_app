@@ -22,7 +22,7 @@ def caps
   {
     caps: {
       platformName: "Android",
-      deviceName: "odessa", # Aqui poner el nombre del dispositivo
+      deviceName: "camellian", # Aqui poner el nombre del dispositivo
       appPackage: "com.mercadolibre",
       appActivity: ".splash.SplashActivity",
       automationName: "UiAutomator2",
@@ -43,10 +43,11 @@ begin
   begin
     wait.until { driver.find_element(:id, 'com.mercadolibre:id/andes_button_text') }.click
   rescue Selenium::WebDriver::Error::NoSuchElementError
-    puts "✅ No se encontró 'Continuar como Visitante', procediendo..."
+    puts "No se encontró 'Continuar como Visitante', procediendo..."
   end
 
-  search_box = wait.until { driver.find_element(:id, 'com.mercadolibre:id/ui_components_action_bar_search_field') }
+  sleep 3
+  search_box = wait.until { driver.find_element(:id, 'com.mercadolibre:id/ui_components_toolbar_search_field') }
   search_box.click
   take_screenshot(driver, "buscar_ps5")
 
@@ -97,55 +98,55 @@ begin
   end
 
   begin
+    puts "\nPrimeros 5 productos:\n\n"
     wait = Selenium::WebDriver::Wait.new(timeout: 10)
-  
-    puts "\n**Lista de productos con precios:**"
-  
-    first_product_xpath = "(//android.widget.RelativeLayout[@resource-id='com.mercadolibre:id/search_cell_core_list'])[1]"
+
+    productos = []
+
+    begin
+      # Producto 1
+      titulo1 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@text="Sony Playstation 5 Slim Disco 1tb Marvel’s Spider Man 2 Bundle Color Blanco"]') }.text
+      precio1 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@content-desc="91.483 Pesos"]') }.text
+      productos << [titulo1, precio1]
     
-    first_title = wait.until { driver.find_element(:xpath, "#{first_product_xpath}//android.widget.TextView[@resource-id='com.mercadolibre:id/search_cell_title_text_view']") }.text
-    first_price = wait.until { driver.find_element(:id, "com.mercadolibre:id/search_cell_pds_qty_price_view") }.text
-  
-    puts "1. #{first_title} - Precio: #{first_price}"
-  
-    all_prices = wait.until { driver.find_elements(:id, "com.mercadolibre:id/money_amount_text") }
-    titles = wait.until { driver.find_elements(:id, "com.mercadolibre:id/search_cell_title_text_view") }
-  
-
-    real_prices = all_prices[1..-1]
-
-    (2..3).each do |i|
-      product_xpath = "(//android.widget.RelativeLayout[@resource-id='com.mercadolibre:id/search_cell_core_list'])[#{i}]"
-  
-      title = wait.until { driver.find_element(:xpath, "#{product_xpath}//android.widget.TextView[@resource-id='com.mercadolibre:id/search_cell_title_text_view']") }.text
-      price = real_prices[i - 2].text 
-  
-      puts "#{i}. #{title} - Precio: #{price}"
+      # Producto 2
+      titulo2 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@text="Playstation 5 Pro Playstation 5 Pro Sony 2024"]') }.text
+      precio2 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@content-desc="35.000 Pesos"]') }.text
+      productos << [titulo2, precio2]
+    
+      # Scroll intermedio
+      driver.execute_script('mobile: scrollGesture', {
+        left: 500, top: 1000, width: 500, height: 1000,
+        direction: 'down', percent: 1.0
+      })
+      sleep 2
+      take_screenshot(driver, "scroll_intermedio")
+    
+      # Producto 3
+      titulo3 = wait.until { driver.find_element(:xpath, '(//android.widget.TextView[@text="Consola Sony Playstation 5 Digital 30o Aniversario 1 Tb Gris"])[1]') }.text
+      precio3 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@content-desc="23.999 Pesos"]') }.text
+      productos << [titulo3, precio3]
+    
+      # Producto 4
+      titulo4 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@text="Playstation 5 Digital Edición Limitada 30 Aniversario"]') }.text
+      precio4 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@content-desc="20.499 Pesos"]') }.text
+      productos << [titulo4, precio4]
+    
+      # Producto 5
+      titulo5 = wait.until { driver.find_element(:xpath, '(//android.widget.TextView[@text="Consola Sony Playstation 5 Digital 30o Aniversario 1 Tb Gris"])[2]') }.text
+      precio5 = wait.until { driver.find_element(:xpath, '//android.widget.TextView[@content-desc="19.999 Pesos"]') }.text
+      productos << [titulo5, precio5]
+    
+      productos.each_with_index do |(titulo, precio), index|
+        puts "#{index + 1}. #{titulo} – #{precio}"
+      end
+    
+    rescue Selenium::WebDriver::Error::NoSuchElementError => e
+      puts "No se encontraron productos: #{e.message}"
     end
-  
-   
-    driver.execute_script('mobile: scrollGesture', {
-      left: 500,
-      top: 1200,
-      width: 500,
-      height: 500,
-      direction: 'down',
-      percent: 2.0
-    })
-    sleep 0.3
-  
-   
-    all_prices = wait.until { driver.find_elements(:id, "com.mercadolibre:id/money_amount_text") }
-    real_prices = all_prices[1..-1] 
-  
-    (4..5).each do |i|
-      product_xpath = "(//android.widget.RelativeLayout[@resource-id='com.mercadolibre:id/search_cell_core_list'])[#{i}]"
-  
-      title = wait.until { driver.find_element(:xpath, "#{product_xpath}//android.widget.TextView[@resource-id='com.mercadolibre:id/search_cell_title_text_view']") }.text
-      price = real_prices[i - 2].text 
-  
-      puts "#{i}. #{title} - Precio: #{price}"
-    end
+
+    take_screenshot(driver, "primeros_5_productos")
+
   rescue Selenium::WebDriver::Error::NoSuchElementError
     puts "No se encontraron productos o precios."
   end
