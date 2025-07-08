@@ -171,7 +171,7 @@ html_template = <<-HTML
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { color: #333; }
-        .screenshot { margin-bottom: 20px; }
+        .screenshot { margin-bottom: 20px; }  
         img { width: 50%; border: 1px solid #ddd; padding: 5px; border-radius: 5px; }
     </style>
 </head>
