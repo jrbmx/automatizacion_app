@@ -36,7 +36,7 @@ Este repositorio contiene un script en Ruby para automatizar pruebas en la aplic
 
    - Si ves las versiones, Ruby está correctamente instalado.
     
-5. **Instalar dependencias Ruby**
+5. **Instalar dependencias Ruby (Desde laa ruta donde tienes clonado el proyecto)**
     ```bash
     gem install bundler
     bundle install
